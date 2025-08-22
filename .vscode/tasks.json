@@ -1,0 +1,200 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build RPC Service",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "bin/rpc-server.exe",
+                "./rpc/tools.go"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "Build API Service",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "build",
+                "-o",
+                "bin/api-server.exe",
+                "./api/tools.go"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "Build All",
+            "dependsOrder": "parallel",
+            "dependsOn": [
+                "Build RPC Service",
+                "Build API Service"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Generate Protobuf",
+            "type": "shell",
+            "command": "protoc",
+            "args": [
+                "--go_out=./rpc/pb",
+                "--go-grpc_out=./rpc/pb",
+                "--proto_path=.",
+                "tools.proto"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Run RPC Server",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "tools.go",
+                "-f",
+                "etc/tools.yaml"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/rpc"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "go",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Starting rpc server",
+                    "endsPattern": "Starting rpc server at"
+                }
+            }
+        },
+        {
+            "label": "Run API Server",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "tools.go",
+                "-f",
+                "etc/tools.yaml"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/api"
+            },
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "dedicated"
+            },
+            "isBackground": true,
+            "problemMatcher": {
+                "owner": "go",
+                "fileLocation": "absolute",
+                "pattern": {
+                    "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                    "file": 1,
+                    "line": 2,
+                    "column": 3,
+                    "severity": 4,
+                    "message": 5
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Starting server",
+                    "endsPattern": "Listening and serving HTTP"
+                }
+            }
+        },
+        {
+            "label": "Test Email API",
+            "type": "shell",
+            "command": "powershell",
+            "args": [
+                "-Command",
+                "$body = Get-Content test_email.json -Raw; Invoke-RestMethod -Uri 'http://localhost:8888/email/send' -Method Post -ContentType 'application/json' -Body $body"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Test RPC Client",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "run",
+                "test_rpc_client.go"
+            ],
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "problemMatcher": "$go"
+        },
+        {
+            "label": "Go Mod Tidy",
+            "type": "shell",
+            "command": "go",
+            "args": [
+                "mod",
+                "tidy"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}

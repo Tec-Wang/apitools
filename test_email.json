@@ -1,0 +1,13 @@
+{
+  "to": ["wangzheng4j@qq.com"],
+  "cc": [],
+  "bcc": [],
+  "subject": "API Tools 邮件测试",
+  "content": "这是一封来自 API Tools 服务的测试邮件。\n\n功能测试包括：\n- 基本邮件发送\n- 中文支持\n- 时间戳：2025-01-22",
+  "content_type": "text/plain",
+  "from": "wangzheng4j@qq.com",
+  "from_name": "API Tools Service",
+  "reply_to": "",
+  "priority": 3,
+  "attachments": []
+}

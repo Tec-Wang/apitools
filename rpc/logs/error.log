@@ -1,0 +1,1 @@
+{"@timestamp":"2025-08-22T17:34:30.405+08:00","caller":"zrpc/server.go:90","content":"listen tcp 127.0.0.1:8080: bind: Only one usage of each socket address (protocol/network address/port) is normally permitted.","level":"error"}

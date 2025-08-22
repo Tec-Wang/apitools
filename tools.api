@@ -1,0 +1,67 @@
+syntax = "v1"
+
+type (
+	SendEmailReq {
+		// 收件人列表（必填）
+		To []string `json:"to"`
+		// 抄送列表（可选）
+		Cc []string `json:"cc,omitempty"`
+		// 密送列表（可选）
+		Bcc []string `json:"bcc,omitempty"`
+		// 邮件主题（必填）
+		Subject string `json:"subject"`
+		// 邮件正文内容（必填）
+		Content string `json:"content"`
+		// 内容类型，如 "text/plain" 或 "text/html"（可选，默认为 text/plain）
+		ContentType string `json:"content_type,omitempty"`
+		// 发件人邮箱（可选，通常由系统配置）
+		From string `json:"from,omitempty"`
+		// 发件人显示名称（可选）
+		FromName string `json:"from_name,omitempty"`
+		// 回复邮箱（可选）
+		ReplyTo string `json:"reply_to,omitempty"`
+		// 邮件优先级：1-高，3-普通，5-低（可选）
+		Priority int `json:"priority,omitempty"`
+		// 附件列表（可选）
+		Attachments []EmailAttachment `json:"attachments,omitempty"`
+	}
+	// 邮件附件结构
+	EmailAttachment {
+		// 附件文件名
+		FileName string `json:"file_name"`
+		// 附件内容（Base64编码）
+		Content string `json:"content"`
+		// 附件MIME类型
+		ContentType string `json:"content_type"`
+		// 附件大小（字节）
+		Size int64 `json:"size,omitempty"`
+	}
+	SendEmailResp {
+		// 响应状态码
+		Code int64 `json:"code"`
+		// 响应消息
+		Message string `json:"message"`
+		// 邮件ID（发送成功时返回）
+		EmailId string `json:"email_id,omitempty"`
+		// 发送时间戳
+		SendTime int64 `json:"send_time,omitempty"`
+	}
+)
+
+// 定义 HTTP 服务
+// 微服务名称为 tools，生成的代码目录和配置文件将和 tools 值相关
+@server (
+	prefix: /email
+	group:  email
+)
+service tools {
+	// 定义 http.HandleFunc 转换的 go 文件名称及方法
+	@handler SendEmail
+	// 定义接口
+	// 请求方法为 post
+	// 路由为 /email/send
+	// 请求体为 SendEmailReq
+	// 响应体为 SendEmailResp，响应体必须有 returns 关键字修饰
+	post /send (SendEmailReq) returns (SendEmailResp)
+}
+

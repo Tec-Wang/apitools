@@ -1,0 +1,8 @@
+Name: tools
+Host: 0.0.0.0
+Port: 8888
+
+# 邮件RPC服务配置
+EmailRpc:
+  Endpoints:
+    - 127.0.0.1:8080

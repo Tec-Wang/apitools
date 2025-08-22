@@ -1,0 +1,103 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.23'
+
+    - name: Build
+      run: make build
+
+    - name: Test Server Connection
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        timeout: 60s
+        command_timeout: 30s
+        script: |
+          echo "=== 服务器连接测试 ==="
+          echo "当前用户: $(whoami)"
+          echo "当前目录: $(pwd)"
+          echo "系统信息: $(uname -a)"
+          echo "磁盘空间: $(df -h /)"
+          echo "内存使用: $(free -h)"
+
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        timeout: 60s
+        command_timeout: 30s
+        script: |
+          echo "=== 开始部署准备 ==="
+          
+          # 创建目标目录
+          echo "创建目标目录..."
+          mkdir -p /root/workspace
+          cd /root/workspace
+          echo "当前工作目录: $(pwd)"
+          
+          # 清理旧文件
+          echo "清理旧文件..."
+          rm -f api-server-linux-amd64 rpc-server-linux-amd64 || echo "没有找到旧的可执行文件"
+          rm -rf output logs || echo "没有找到旧的目录"
+          
+          echo "部署准备完成"
+
+    - name: Upload Files to Server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        source: "output/*"
+        target: "/root/workspace/"
+        strip_components: 1
+        overwrite: true
+
+    - name: Upload Makefile to Server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        source: "makefile"
+        target: "/root/workspace/"
+        overwrite: true
+
+    - name: Start Services on Server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USERNAME }}
+        key: ${{ secrets.SERVER_SSH_KEY }}
+        port: ${{ secrets.SERVER_PORT }}
+        timeout: 300s
+        command_timeout: 120s
+        script: |
+          cd /root/workspace
+          make deploy

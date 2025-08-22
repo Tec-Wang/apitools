@@ -6,3 +6,9 @@ Port: 8888
 EmailRpc:
   Endpoints:
     - 127.0.0.1:8080
+
+# GitLab配置
+GitLab:
+  DefaultUrl: "your gitlab url"
+  DefaultAccessToken: "your gitlab access token"
+  TimeoutSeconds: 30

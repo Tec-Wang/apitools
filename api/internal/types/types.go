@@ -3,11 +3,56 @@
 
 package types
 
+type CommitInfo struct {
+	CommitId      string `json:"commit_id"`
+	ShortId       string `json:"short_id"`
+	Title         string `json:"title"`
+	Message       string `json:"message"`
+	AuthorName    string `json:"author_name"`
+	AuthorEmail   string `json:"author_email"`
+	CommittedDate string `json:"committed_date"`
+	WebUrl        string `json:"web_url"`
+}
+
 type EmailAttachment struct {
 	FileName    string `json:"file_name"`
 	Content     string `json:"content"`
 	ContentType string `json:"content_type"`
 	Size        int64  `json:"size,omitempty"`
+}
+
+type GitCommitRecordReq struct {
+	Projects    []string `json:"projects"`
+	StartDate   string   `json:"start_date"`
+	EndDate     string   `json:"end_date"`
+	Username    string   `json:"username"`
+	GitlabUrl   string   `json:"gitlab_url,optional"`
+	AccessToken string   `json:"access_token,optional"`
+}
+
+type GitCommitRecordResp struct {
+	Code           int64            `json:"code"`
+	Message        string           `json:"message"`
+	Username       string           `json:"username,omitempty"`
+	DateRange      string           `json:"date_range,omitempty"`
+	ProjectCommits []ProjectCommits `json:"project_commits,omitempty"`
+	Summary        GitCommitSummary `json:"summary,omitempty"`
+}
+
+type GitCommitSummary struct {
+	ProjectsWithCommits int64  `json:"projects_with_commits"`
+	TotalCommits        int64  `json:"total_commits"`
+	TotalProjects       int64  `json:"total_projects"`
+	GitlabServer        string `json:"gitlab_server"`
+}
+
+type ProjectCommits struct {
+	ProjectId   int64        `json:"project_id"`
+	ProjectName string       `json:"project_name"`
+	ProjectPath string       `json:"project_path"`
+	ProjectUrl  string       `json:"project_url"`
+	Commits     []CommitInfo `json:"commits"`
+	CommitCount int64        `json:"commit_count"`
 }
 
 type SendEmailReq struct {

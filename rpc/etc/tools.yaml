@@ -7,9 +7,9 @@ Timeout: 30000
 Email:
   Host: smtp.qq.com
   Port: 465
-  Username: wangzheng4j@qq.com
-  Password: fnsvfcexxpqjiihe
-  From: wangzheng4j@qq.com
+  Username: xxx
+  Password: xxx
+  From: zhangsan
   FromName: API Tools Service
 
 # 日志配置

@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	email "apitools/api/internal/handler/email"
+	work "apitools/api/internal/handler/work"
 	"apitools/api/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -22,5 +23,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithPrefix("/email"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/git_code_commit_record",
+				Handler: work.GitCodeCommitRecordHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/work"),
 	)
 }

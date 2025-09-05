@@ -7,7 +7,7 @@ import (
 	"net/http"
 
 	email "apitools/api/internal/handler/email"
-	feishu "apitools/api/internal/handler/feishu"
+	lark "apitools/api/internal/handler/lark"
 	work "apitools/api/internal/handler/work"
 	"apitools/api/internal/svc"
 
@@ -31,10 +31,10 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodPost,
 				Path:    "/average_time",
-				Handler: feishu.AverageTimeHandler(serverCtx),
+				Handler: lark.AverageTimeHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/feishu"),
+		rest.WithPrefix("/lark"),
 	)
 
 	server.AddRoutes(

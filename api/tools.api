@@ -167,14 +167,14 @@ service tools {
 }
 
 @server (
-	prefix: /feishu
-	group:  feishu
+	prefix: /lark
+	group:  lark
 )
 service tools {
 	@handler AverageTime
 	// 定义接口
 	// 请求方法为 post
-	// 路由为 /work/average_time
+	// 路由为 /lark/average_time
 	// 请求体为 AverageTimeReq
 	// 响应体为 AverageTimeResp
 	post /average_time (AverageTimeReq) returns (AverageTimeResp)

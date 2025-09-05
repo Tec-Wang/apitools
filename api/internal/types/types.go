@@ -11,6 +11,7 @@ type AverageTimeReq struct {
 type AverageTimeResp struct {
 	AverageTimestamp int64  `json:"average_timestamp"`
 	AverageTime      string `json:"average_time"`
+	HHMMSS           string `json:"hhmmss"`
 }
 
 type CommitInfo struct {

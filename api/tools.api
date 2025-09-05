@@ -132,6 +132,8 @@ type (
 		AverageTimestamp int64 `json:"average_timestamp"`
 		// 平均时间
 		AverageTime string `json:"average_time"`
+		// 平均时间（HH:MM:SS）
+		HHMMSS string `json:"hhmmss"`
 	}
 )
 

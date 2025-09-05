@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"net/http"
@@ -37,7 +38,8 @@ func main() {
 func requestDetailMiddleware(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		logx.Infof("request detail: %s %s", r.Method, r.URL.Path)
-		logx.Infof("request body: %s", r.Body)
+		requestBody, _ := json.Marshal(r.Body)
+		logx.Infof("request body: %s", requestBody)
 		next(w, r)
 	}
 }

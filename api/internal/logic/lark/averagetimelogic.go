@@ -54,7 +54,8 @@ func (l *AverageTimeLogic) AverageTimeHourMinuteSecond(req *types.AverageTimeReq
 	}
 
 	return &types.AverageTimeResp{
-		AverageTime: averageTime,
+		AverageTime:      time.Unix(averageTime, 0).Format("2006-01-02 15:04:05"),
+		AverageTimestamp: averageTime,
 	}, nil
 }
 

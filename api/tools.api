@@ -129,7 +129,9 @@ type (
 	}
 	AverageTimeResp {
 		// 平均时间
-		AverageTime int64 `json:"average_time"`
+		AverageTimestamp int64 `json:"average_timestamp"`
+		// 平均时间
+		AverageTime string `json:"average_time"`
 	}
 )
 

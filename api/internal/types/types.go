@@ -9,7 +9,8 @@ type AverageTimeReq struct {
 }
 
 type AverageTimeResp struct {
-	AverageTime int64 `json:"average_time"`
+	AverageTimestamp int64  `json:"average_timestamp"`
+	AverageTime      string `json:"average_time"`
 }
 
 type CommitInfo struct {

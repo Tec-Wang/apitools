@@ -33,7 +33,6 @@ func (l *AverageTimeLogic) AverageTime(req *types.AverageTimeReq) (resp *types.A
 	default:
 		return nil, errors.New("calculate type not supported")
 	}
-	return
 }
 
 func (l *AverageTimeLogic) AverageTimeHourMinuteSecond(req *types.AverageTimeReq) (resp *types.AverageTimeResp, err error) {

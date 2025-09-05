@@ -3,6 +3,15 @@
 
 package types
 
+type AverageTimeReq struct {
+	TimestampList []int64 `json:"timestamp_list"`
+	CalculateType int     `json:"calculate_type"`
+}
+
+type AverageTimeResp struct {
+	AverageTime int64 `json:"average_time"`
+}
+
 type CommitInfo struct {
 	CommitId      string `json:"commit_id"`
 	ShortId       string `json:"short_id"`

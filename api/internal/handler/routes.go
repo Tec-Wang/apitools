@@ -29,6 +29,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
+				Path:    "/average_time",
+				Handler: work.AverageTimeHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/git_code_commit_record",
 				Handler: work.GitCodeCommitRecordHandler(serverCtx),
 			},

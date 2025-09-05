@@ -2,14 +2,24 @@ package config
 
 import (
 	"github.com/zeromicro/go-zero/rest"
-	"github.com/zeromicro/go-zero/zrpc"
 )
 
 type Config struct {
 	rest.RestConf
-	EmailRpc zrpc.RpcClientConf
+	// 邮件配置
+	Email EmailConfig
 	// GitLab 配置
 	GitLab GitLabConfig
+}
+
+// 邮件配置
+type EmailConfig struct {
+	Host     string `json:",optional"`
+	Port     int    `json:",default=587"`
+	Username string `json:",optional"`
+	Password string `json:",optional"`
+	From     string `json:",optional"`
+	FromName string `json:",optional"`
 }
 
 type GitLabConfig struct {

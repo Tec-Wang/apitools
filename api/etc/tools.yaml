@@ -2,10 +2,14 @@ Name: tools
 Host: 0.0.0.0
 Port: 8888
 
-# 邮件RPC服务配置
-EmailRpc:
-  Endpoints:
-    - 127.0.0.1:8080
+# 邮件配置
+Email:
+  Host: "smtp.qq.com"
+  Port: 587
+  Username: "your_email@qq.com"
+  Password: "your_email_password"
+  From: "your_email@qq.com"
+  FromName: "API Tools"
 
 # GitLab配置
 GitLab:

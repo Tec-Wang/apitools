@@ -121,6 +121,16 @@ type (
 		// 查询的服务器地址
 		GitlabServer string `json:"gitlab_server"`
 	}
+	AverageTimeReq {
+		// 时间戳列表
+		TimestampList []int64 `json:"timestamp_list"`
+		// 计算类型
+		CalculateType int `json:"calculate_type"`
+	}
+	AverageTimeResp {
+		// 平均时间
+		AverageTime int64 `json:"average_time"`
+	}
 )
 
 // 定义 HTTP 服务
@@ -154,5 +164,13 @@ service tools {
 	// 请求体为 GitCommitRecordReq
 	// 响应体为 GitCommitRecordResp
 	post /git_code_commit_record (GitCommitRecordReq) returns (GitCommitRecordResp)
+
+	@handler AverageTime
+	// 定义接口
+	// 请求方法为 post
+	// 路由为 /work/average_time
+	// 请求体为 AverageTimeReq
+	// 响应体为 AverageTimeResp
+	post /average_time (AverageTimeReq) returns (AverageTimeResp)
 }
 

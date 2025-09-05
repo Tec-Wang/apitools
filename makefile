@@ -5,7 +5,6 @@
 GO_VERSION := 1.23.11
 OUTPUT_DIR := output
 API_DIR := api
-RPC_DIR := rpc
 
 # 构建目标
 .PHONY: all build clean help env info
@@ -18,7 +17,6 @@ help:
 	@echo "可用的构建命令:"
 	@echo "  make build     - 构建所有平台的可执行文件"
 	@echo "  make build-api - 只构建API服务"
-	@echo "  make build-rpc - 只构建RPC服务"
 	@echo "  make env       - 显示Go环境信息"
 	@echo "  make run       - 运行服务"
 
@@ -38,7 +36,7 @@ $(OUTPUT_DIR):
 	@mkdir -p $(OUTPUT_DIR)
 
 # 构建所有服务
-build: $(OUTPUT_DIR) build-api build-rpc
+build: $(OUTPUT_DIR) build-api
 	@echo "=== 构建完成，查看输出文件 ==="
 	@chmod +x $(OUTPUT_DIR)/*-linux-*
 	@ls -la $(OUTPUT_DIR)/
@@ -52,26 +50,14 @@ build-api: $(OUTPUT_DIR)
 		CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o ../$(OUTPUT_DIR)/api-server-linux-amd64 tools.go
 	@echo "API服务构建完成"
 
-# 构建RPC服务
-build-rpc: $(OUTPUT_DIR)
-	@echo "=== 开始构建RPC服务... ==="
-	@cd $(RPC_DIR) && \
-		echo "RPC服务依赖包:" && \
-		go list -m all | head -20 || echo "无法获取依赖包列表" && \
-		CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -ldflags '-extldflags "-static"' -o ../$(OUTPUT_DIR)/rpc-server-linux-amd64 tools.go
-	@echo "RPC服务构建完成"
-
 # 运行生产环境服务
 run:
 	@echo "=== 启动生产服务 ==="
 	@echo "创建必要目录..."
 	@mkdir -p logs etc
-	@echo "启动RPC服务..."
-	@nohup ./rpc-server-linux-amd64 -f etc/rpc.yaml > logs/rpc.log 2>&1 & echo "RPC服务已启动，PID: $$!"
 	@echo "启动API服务..."
 	@nohup ./api-server-linux-amd64 -f etc/api.yaml > logs/api.log 2>&1 & echo "API服务已启动，PID: $$!"
 	@echo "服务启动完成，查看日志:"
-	@echo "RPC日志: tail -f logs/rpc.log"
 	@echo "API日志: tail -f logs/api.log"
 
 # 部署服务（停止旧服务 + 启动新服务）
@@ -84,5 +70,9 @@ deploy:
 	@killall rpc-server-linux-amd64 2>/dev/null || echo "rpc-server进程已停止或不存在"
 	@sleep 2
 	@echo "2. 启动新服务..."
-	@chmod +x api-server-linux-amd64 rpc-server-linux-amd64
+	@chmod +x api-server-linux-amd64
 	@$(MAKE) run
+
+gen-api:
+	@goctl api go -api api/tools.api -dir api
+

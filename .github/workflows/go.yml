@@ -61,7 +61,7 @@ jobs:
           
           # 清理旧文件
           echo "清理旧文件..."
-          rm -f api-server-linux-amd64 rpc-server-linux-amd64 || echo "没有找到旧的可执行文件"
+          rm -f api-server-linux-amd64 || echo "没有找到旧的可执行文件"
           rm -rf output logs || echo "没有找到旧的目录"
           
           echo "部署准备完成"

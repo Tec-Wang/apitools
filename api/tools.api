@@ -164,7 +164,13 @@ service tools {
 	// 请求体为 GitCommitRecordReq
 	// 响应体为 GitCommitRecordResp
 	post /git_code_commit_record (GitCommitRecordReq) returns (GitCommitRecordResp)
+}
 
+@server (
+	prefix: /feishu
+	group:  feishu
+)
+service tools {
 	@handler AverageTime
 	// 定义接口
 	// 请求方法为 post

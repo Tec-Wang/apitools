@@ -3,9 +3,10 @@ package feishu
 import (
 	"net/http"
 
-	"apitools/api/internal/logic/feishu"
+	lark "apitools/api/internal/logic/feishu"
 	"apitools/api/internal/svc"
 	"apitools/api/internal/types"
+
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
@@ -17,7 +18,7 @@ func AverageTimeHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := feishu.NewAverageTimeLogic(r.Context(), svcCtx)
+		l := lark.NewAverageTimeLogic(r.Context(), svcCtx)
 		resp, err := l.AverageTime(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
